@@ -47,7 +47,7 @@ class Auth:
             'exp': str(datetime.utcnow() + timedelta(seconds=JWT_EXP_DELTA_SECONDS))
         }
         jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
-        return jwt_token
+        return jwt_token.decode('utf-8')
 
 
     
