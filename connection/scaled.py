@@ -1,6 +1,15 @@
 import pymongo
 
-myclient = pymongo.MongoClient("mongodb://vrdata.viarezo.fr:27017/")
+client = pymongo.MongoClient("mongodb://localhost:27017/")
 
-mydb = myclient["mydatabase"]
-print(myclient.list_database_names())
+vrdata = client["vrdata"]
+
+collection = vrdata["customers"]
+
+mydict = { "name": "John", "address": "Highway 37" }
+
+x = collection.insert_one(mydict)
+
+dbs = client.list_database_names()
+
+print(dbs)
