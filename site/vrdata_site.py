@@ -46,21 +46,15 @@ def query(code):
     <title>Use a HTTP POST Request</title>
     '''
 
-@app.route('/auth/<string:code>', methods=['GET', 'POST'])
-def auth(code):
+@app.route('/auth', methods=['GET', 'POST'])
+def auth():
+    content = request.json
+    user = content['user']
+    password = content['password']
     auth = Auth()
-    print('aa')
-    if request.method == 'POST':
-        content = request.json
-        
-        if not 'id' in content:
-            #print('[PROBLEM]',content)
-            return jsonify({})
-        else:
-            #print(code,content['id'])
-            with app.app_context():
-                socketio.emit('multicast', {request.get_json()}, broadcast = True,namespace='/'+code)
-            return jsonify({"code":code,"id":content['id']})
+    if auth.verify(user,password):
+        token = auth.token(user,password)
+        return jsonify({'token':token})
     return '''
     <!doctype html>
     <title>Use a HTTP POST Request</title>
