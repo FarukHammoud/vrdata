@@ -48,10 +48,11 @@ def query(code):
 
 @app.route('/auth/<string:code>', methods=['GET', 'POST'])
 def auth(code):
+    auth = Auth()
+    print('aa')
     if request.method == 'POST':
         content = request.json
-        auth = Auth()
-        print('aa')
+        
         if not 'id' in content:
             #print('[PROBLEM]',content)
             return jsonify({})
