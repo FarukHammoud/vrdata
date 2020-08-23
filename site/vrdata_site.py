@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
 from flask_bootstrap import Bootstrap
+from auth import Auth
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
@@ -32,6 +33,24 @@ def multicast(code):
 def query(code):
     if request.method == 'POST':
         content = request.json
+        if not 'id' in content:
+            #print('[PROBLEM]',content)
+            return jsonify({})
+        else:
+            #print(code,content['id'])
+            with app.app_context():
+                socketio.emit('multicast', {request.get_json()}, broadcast = True,namespace='/'+code)
+            return jsonify({"code":code,"id":content['id']})
+    return '''
+    <!doctype html>
+    <title>Use a HTTP POST Request</title>
+    '''
+
+@app.route('/auth/<string:code>', methods=['GET', 'POST'])
+def auth(code):
+    if request.method == 'POST':
+        content = request.json
+        auth = Auth()
         if not 'id' in content:
             #print('[PROBLEM]',content)
             return jsonify({})

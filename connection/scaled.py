@@ -1,6 +1,6 @@
 import pymongo
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+client = pymongo.MongoClient("mongodb://vrdata.viarezo.fr:27017/")
 
 vrdata = client["vrdata"]
 
