@@ -27,7 +27,7 @@ class Auth:
         import requests
 
         url = 'https://test.auth.viarezo.fr/oauth/token'
-        myobj = {'grant_type':'password','client_id':'b21c69c5569bda11a0005cf2515b74471eb33c99','client_secret':'95322a9340e0eddf70316b402e1a47917ed89669','scope','default','username':username,'password':password}
+        myobj = {'grant_type':'password','client_id':'b21c69c5569bda11a0005cf2515b74471eb33c99','client_secret':'95322a9340e0eddf70316b402e1a47917ed89669','scope':'default','username':username,'password':password}
 
         x = requests.post(url, data = myobj)
 
