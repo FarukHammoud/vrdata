@@ -53,12 +53,10 @@ def auth():
     password = content['password']
     auth = Auth()
     if auth.verify(user,password):
+        print('User verified!',user,password)
         token = auth.token(user,password)
         return jsonify({'token':token})
-    return '''
-    <!doctype html>
-    <title>Use a HTTP POST Request</title>
-    '''
+    return jsonify({'message': 'Wrong credentials'}, status=400)
 
 @socketio.on('code')
 def handle_code(json, methods=['GET', 'POST']):

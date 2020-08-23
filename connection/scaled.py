@@ -1,15 +1,19 @@
 import pymongo
 
-client = pymongo.MongoClient("mongodb://vrdata.viarezo.fr:27017/")
+client = pymongo.MongoClient("mongodb://localhost:27017/")
 
 vrdata = client["vrdata"]
 
-collection = vrdata["customers"]
+collection = vrdata["users"]
 
-mydict = { "name": "John", "address": "Highway 37" }
+mydict = { "user": "2019hammoudf", "password": "abcd1234" }
 
 x = collection.insert_one(mydict)
 
 dbs = client.list_database_names()
 
 print(dbs)
+
+selected = vrdata['users'].find_one({'user':'2019hammoudf'})
+
+print(selected['password'])
