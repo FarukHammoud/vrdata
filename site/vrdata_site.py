@@ -49,11 +49,12 @@ def query(code):
 @app.route('/auth', methods=['GET', 'POST'])
 def auth():
     content = request.json
-    user = content['user']
+    user = content['username']
     password = content['password']
     auth = Auth()
-    if auth.verify(user,password):
-        print('User verified!',user,password)
+    if auth.VRify(user,password):
+        print('User VRified!',user,password)
+    if auth.
         token = auth.token(user,password)
         return jsonify({'token':token})
     return jsonify({'message': 'Wrong credentials'}, status=400)
