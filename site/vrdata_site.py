@@ -51,6 +51,7 @@ def auth(code):
     if request.method == 'POST':
         content = request.json
         auth = Auth()
+        print('aa')
         if not 'id' in content:
             #print('[PROBLEM]',content)
             return jsonify({})
