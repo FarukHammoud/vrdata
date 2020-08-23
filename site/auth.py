@@ -43,7 +43,7 @@ class Auth:
         selected = self.vrdata['users'].find_one({'user':user})
 
         payload = {
-            'user_id': selected['_id'].valueOf(),
+            'user_id': str(selected['_id']),
             'exp': datetime.utcnow() + timedelta(seconds=JWT_EXP_DELTA_SECONDS)
         }
         jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
