@@ -23,6 +23,7 @@ class Auth:
         else:
             print('VRdata is not available.')
             self.vrdata = None
+            
     def VRify(self,username,password):
         import requests
 
@@ -31,9 +32,14 @@ class Auth:
 
         x = requests.post(url, data = myobj)
 
-        print(x.text)
-        
-        self.token = None
+        if 'access_token' in x:
+            self.token = x['access_token']
+            print(self.token)
+            return True
+        else:
+            self.token = None
+            return False
+
     def verify(self,user,password):
 
         selected = self.vrdata['users'].find_one({'user':user})
