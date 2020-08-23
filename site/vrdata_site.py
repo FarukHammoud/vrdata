@@ -56,7 +56,7 @@ def auth():
         print('User VRified!',user,password)
         #token = auth.token(user,password)
         #return jsonify({'token':token})
-    return jsonify({'message': 'Wrong credentials'}, status=400)
+    return jsonify({'message': 'Wrong credentials'})
 
 @socketio.on('code')
 def handle_code(json, methods=['GET', 'POST']):
