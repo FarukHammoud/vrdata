@@ -23,7 +23,7 @@ class Auth:
         else:
             print('VRdata is not available.')
             self.vrdata = None
-            
+
     def VRify(self,username,password):
         import requests
 
@@ -32,7 +32,9 @@ class Auth:
 
         x = requests.post(url, data = myobj)
 
-        if 'access_token' in x:
+        print(x.json())
+
+        if 'access_token' in x.json():
             self.token = x['access_token']
             print(self.token)
             return True
