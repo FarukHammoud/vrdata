@@ -4,19 +4,20 @@ class Connector:
         self.db_name = db_name
         self.username = username
         self.password = password
-        
+
         if self.username is None:
             self.username = input('username: ')
 
         if self.password is None:
             self.password = input('password: ')
 
-        import requests
+        import requests, json
 
         url = 'http://vrdata.viarezo.fr/auth'
-        myobj = {'username':self.username,'password':self.password}
-
-        x = requests.post(url, data = myobj)
+        login_info = {'username':self.username,'password':self.password}
+        json_login_info = json.dumps(login_info)
+        print(json_login_info)
+        x = requests.post(url, json = login_info)
 
         print(x.text)
         

@@ -23,7 +23,7 @@ class Auth:
         else:
             print('VRdata is not available.')
             self.vrdata = None
-    def VRify(self,user,password):
+    def VRify(self,username,password):
         import requests
 
         url = 'https://test.auth.viarezo.fr/oauth/token'
