@@ -1,2 +1,2 @@
 import vrdata
-conn = vrdata.connect('vrdata')
+mydb = vrdata.connect('mydb')

@@ -20,7 +20,12 @@ class Connector:
         print(x.text)
         
         self.token = None
+    def __getitem__(self,key):
+
+
     def insert(self,document):
         pass
     def find(self,query,scope):
         pass
+
+class Collection
