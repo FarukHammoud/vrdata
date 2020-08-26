@@ -38,7 +38,7 @@ class Auth:
 
             if y_n == 'y':
                 f = open('credentials', 'w') 
-                f.writelines([self.admin_username, self.admin_password])
+                f.write(self.admin_username+'\n'+self.admin_password+'\n')
                 f.close() # You can add this but it is not mandatory 
     
     def login(self):
