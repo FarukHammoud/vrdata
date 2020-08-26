@@ -1,5 +1,5 @@
 import vrdata
-vrdb = vrdata.connect('vrdata')
-selected = vrdb['users'].find_one({'user':'2019hammoudf'})
+vrdb = vrdata.connect('admin')
+selected = vrdb['users'].find()
 
-print(selected['password'])
+print(selected)

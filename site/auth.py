@@ -21,9 +21,12 @@ class Auth:
         import os.path
         # Check if credentials file exists and upload admin credentials
         if os.path.isfile('credentials'):
-            with open('credentials', 'r') as reader:
-                self.admin_username = reader[0]
-                self.admin_password = reader[1]
+            f = open("credentials", 'r')
+            lines = f.readlines()  # array of file lines
+            self.admin_username = lines[0]
+            self.admin_password = lines[1]
+            f.close()
+
         # Otherwise ask for credentials and save it in the file
         else:
             self.admin_username = input('username: ')
