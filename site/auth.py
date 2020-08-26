@@ -38,7 +38,7 @@ class Auth:
             if y_n == 'y':
                 with open('credentials', 'a') as f: # able to append data to file
                     f.write(self.admin_username+'\n') # Were var1 is some variable you have set previously
-                    f.write(self.admin_password) 
+                    f.write(self.admin_password+'\n') 
                     f.close() # You can add this but it is not mandatory 
     
     def login(self):
