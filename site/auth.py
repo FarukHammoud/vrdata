@@ -10,7 +10,7 @@ class User:
 class Auth:
 
     def __init__(self):
-
+        pass
         # Check MongoDB Server access
 
         #import pymongo
