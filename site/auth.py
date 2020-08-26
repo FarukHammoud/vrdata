@@ -78,7 +78,7 @@ class Auth:
 
         tokens = self.vrdata['tokens']
         tokens.insert_one({'token':token,'complete_token':complete_token})
-        self.client.admin.add_user(user, token, roles=[{'role':'readWrite','db':db_name}])
+        self.client[db_name].add_user(user, token, roles=[{'role':'readWrite','db':db_name}])
         return token
 
     def create_session(self,user,password,db_name,vr_token):

@@ -1,6 +1,6 @@
 import pymongo
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+client = pymongo.MongoClient('vrdata.viarezo.fr',username='root',password='root',authSource='admin')
 
-client.testdb.add_user('faruk', '1234', roles=[{'role':'readWrite','db':'vrdata'}])
+client['db1'].add_user('2019hammoudf', 'eyJ0eXAiOiJKV1Qi', roles=[{'role':'readWrite','db':'db1'}])
 
