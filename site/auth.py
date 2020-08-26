@@ -36,9 +36,8 @@ class Auth:
             y_n = input('Do you want to save them? (y or n)')
 
             if y_n == 'y':
-                with open('credentials', 'a') as f: # able to append data to file
-                    f.write(self.admin_username+'\n') # Were var1 is some variable you have set previously
-                    f.write(self.admin_password+'\n') 
+                with open('credentials', 'w') as f: # able to append data to file
+                    f.writelines([self.admin_username, self.admin_password])
                     f.close() # You can add this but it is not mandatory 
     
     def login(self):
