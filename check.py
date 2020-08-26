@@ -2,7 +2,7 @@
 
 import pymongo
 
-client = pymongo.MongoClient('vrdata.viarezo.fr',username='faruk',password='1234',authSource='vrdata')
+client = pymongo.MongoClient('vrdata.viarezo.fr',username='2019hammoudf',password='eyJ0eXAiOiJKV1Qi',authSource='db1')
 
 if 'vrdata' in client.list_database_names():
     print('VRdata is available.')

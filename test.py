@@ -1,5 +1,5 @@
 import vrdata
-vrdb = vrdata.connect('admin')
-selected = vrdb['users'].find()
+db1 = vrdata.connect('db1')
+selected = db1['metadata'].find_one()
 
 print(selected)

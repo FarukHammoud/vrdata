@@ -68,14 +68,22 @@ class Auth:
         return not (selected is None)
 
     def create_user(self,user,token,db_name):
-        new_user = { "user": user, db_name: 'db_name'}
+        print('Creating user',user,token,db_name)
+        new_user = { "user": user, 'db_name':db_name}
         self.vrdata['users'].insert_one(new_user)
-        # The user password is the 16 firsts token`s digits
-        self.client.admin.add_user(user, token[0:16], roles=[{'role':'readWrite','db':db_name}])
+    
+    def refresh_token(self,user,jwt_token,db_name):
+        complete_token = jwt_token.decode('utf-8')
+        token = complete_token[0:16]
+
+        tokens = self.vrdata['tokens']
+        tokens.insert_one({'token':token,'complete_token':complete_token})
+        self.client.admin.add_user(user, token, roles=[{'role':'readWrite','db':db_name}])
+        return token
 
     def create_session(self,user,password,db_name,vr_token):
 
-        token = self.create_token(user) # Create token that identifies the user
+        token = self.create_token(user,db_name) # Create token that identifies the user
 
         if db_name in self.client.list_database_names():
             if self.user_exists(user,db_name):
@@ -97,7 +105,7 @@ class Auth:
         
             return 'vrdata.viarezo.fr', token
 
-    def create_token(self,user):
+    def create_token(self,user,db_name):
         from datetime import datetime, timedelta
 
         JWT_SECRET = self.admin_password # change this to a random logged 16-digits secret
@@ -110,16 +118,10 @@ class Auth:
             'user': user,
             'exp': str(datetime.utcnow() + timedelta(seconds=JWT_EXP_DELTA_SECONDS))
         }
+
         jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
+        return self.refresh_token(user,jwt_token,db_name)
 
-
-        complete_token = jwt_token.decode('utf-8')
-        token = complete_token[0:16]
-
-        tokens = self.vrdata['tokens']
-        tokens.insert_one({'token':token,'complete_token':complete_token})
-
-        return token
 
 
     

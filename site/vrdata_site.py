@@ -28,7 +28,7 @@ def auth():
 
     except BaseException:
         pass
-    
+
     return jsonify({'verified': '0'})
 
 
