@@ -14,13 +14,23 @@ def index():
 
 @app.route('/auth', methods=['GET', 'POST'])
 def auth():
-    content = request.json
-    user = content['username']
-    password = content['password']
-    if auth.VRify(user,password):
-        print('User VRified!',user,password)
-        return jsonify({'verified': '1','server':'vrdata.viarezo.fr'})
+    try:
+        content = request.json
+        user, password, db_name = content['username'], content['password'], content['db_name']
+
+        vr_token = auth.VRify(user,password)
+        print(user,' VRified!')
+
+        server, token = auth.create_session(user,password,db_name,vr_token)
+        print('Session Created')
+
+        return jsonify({'verified': '1','server':server,'token':token})
+
+    except BaseException:
+        pass
+    
     return jsonify({'verified': '0'})
+
 
 if __name__ == '__main__':
     auth = Auth()

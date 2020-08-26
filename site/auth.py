@@ -1,12 +1,5 @@
 import jwt
 
-class User:
-
-    def __init__(self,id,name,password):
-        self.id = id
-        self.name = name
-        self.password = password
-
 class Auth:
 
     def __init__(self):
@@ -23,15 +16,13 @@ class Auth:
         if os.path.isfile('credentials'):
             f = open("credentials", 'r')
             lines = f.readlines()  # array of file lines
-            print(lines)
             self.admin_username = lines[0].strip('\n')
-            print('.',self.admin_username,'.')
             self.admin_password = lines[1].strip('\n')
-            print('.',self.admin_password,'.')
             f.close()
 
         # Otherwise ask for credentials and save it in the file
         else:
+            print('Enter your VRdata admin credentials ->')
             self.admin_username = input('username: ')
             self.admin_password = input('password: ')
             y_n = input('Do you want to save them? (y or n) ')
@@ -48,7 +39,7 @@ class Auth:
         self.client = pymongo.MongoClient("mongodb://localhost:27017/",username=self.admin_username,password=self.admin_password,authSource='admin')
 
         if 'vrdata' in self.client.list_database_names():
-            print('VRdata is available.')
+            print('VRdata is online.')
             self.vrdata = self.client["vrdata"]
 
         else:
@@ -61,40 +52,74 @@ class Auth:
         url = 'https://test.auth.viarezo.fr/oauth/token'
         myobj = {'grant_type':'password','client_id':'b21c69c5569bda11a0005cf2515b74471eb33c99','client_secret':'95322a9340e0eddf70316b402e1a47917ed89669','scope':'default','username':username,'password':password}
 
-        r = requests.post(url, data = myobj)
+        ans = requests.post(url, data = myobj)
 
-        if 'access_token' in r.json():
-            self.vr_token = r.json()['access_token']
-            print(self.vr_token)
-            return True
+        if 'access_token' in ans.json():
+            vr_token = ans.json()['access_token']
+            return vr_token
         else:
-            self.vr_token = None
-            return False
-
-    def verify(self,user,password):
-
-        selected = self.vrdata['users'].find_one({'user':user})
-
-        if selected is None:
             return None
 
-        return selected['password'] == password
+    def user_exists(self,user,db_name):
 
-    def token(self,user,password):
+        if db_name in self.client.list_database_names():
+            print('VRdata is online.')
+        selected = self.vrdata['users'].find_one({'user':user,'db_name':db_name})
+        return not (selected is None)
+
+    def create_user(self,user,token,db_name):
+        new_user = { "user": user, db_name: 'db_name'}
+        self.vrdata['users'].insert_one(new_user)
+        # The user password is the 16 firsts token`s digits
+        self.client.admin.add_user(user, token[0:16], roles=[{'role':'readWrite','db':db_name}])
+
+    def create_session(self,user,password,db_name,vr_token):
+
+        token = self.create_token(user) # Create token that identifies the user
+
+        if db_name in self.client.list_database_names():
+            if self.user_exists(user,db_name):
+                print('Entering existing database.')
+                return 'vrdata.viarezo.fr', token
+            else:
+                print('This name is already used.')
+                return None 
+        else:
+            from datetime import datetime
+            info = { 'created on': str(datetime.utcnow()), 'admin':user }
+
+            new_db = self.client[db_name]
+            metadata = new_db['metadata'] 
+            x = metadata.insert_one(info)
+
+            if not self.user_exists(user,db_name):
+                self.create_user(user,token,db_name)
+        
+            return 'vrdata.viarezo.fr', token
+
+    def create_token(self,user):
         from datetime import datetime, timedelta
 
-        JWT_SECRET = 'secret'
+        JWT_SECRET = self.admin_password # change this to a random logged 16-digits secret
         JWT_ALGORITHM = 'HS256'
         JWT_EXP_DELTA_SECONDS = 20
 
-        selected = self.vrdata['users'].find_one({'user':user})
+       # selected = self.vrdata['users'].find_one({'user':user})
 
         payload = {
-            'user_id': str(selected['_id']),
+            'user': user,
             'exp': str(datetime.utcnow() + timedelta(seconds=JWT_EXP_DELTA_SECONDS))
         }
         jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
-        return jwt_token.decode('utf-8')
+
+
+        complete_token = jwt_token.decode('utf-8')
+        token = complete_token[0:16]
+
+        tokens = self.vrdata['tokens']
+        tokens.insert_one({'token':token,'complete_token':complete_token})
+
+        return token
 
 
     

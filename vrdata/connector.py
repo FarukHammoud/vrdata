@@ -21,11 +21,12 @@ class Connector:
         result = x.json()
 
         if result['verified'] == '1':
-            self.server = result['server']
-            #self.token = 
+            
+            server = result['server']
+            token = result['token'] 
 
             import pymongo
-            client = pymongo.MongoClient(self.server,username=self.username,password=self.password,authSource=db_name)
+            client = pymongo.MongoClient(server,username=self.username,password=token,authSource=db_name)
             return client[db_name]
         else:
             print('Wrong Credentials. Aborting.')
