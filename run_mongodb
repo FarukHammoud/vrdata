@@ -1,0 +1,5 @@
+#!/bin/bash
+# MongoDB
+
+echo "Starting MongoDB!"
+sudo mongod --auth --dbpath /var/lib/mongodb --bind_ip 0.0.0.0 --fork --logpath /var/log/mongod.log

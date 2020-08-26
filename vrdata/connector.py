@@ -18,14 +18,15 @@ class Connector:
         x = requests.post(url, json = login_info)
 
         print(x.text)
-        
-        self.token = None
-    def __getitem__(self,key):
+        result = x.json()
 
+        if result['verified'] == '1':
+            self.server = result['server']
+            #self.token = 
 
-    def insert(self,document):
-        pass
-    def find(self,query,scope):
-        pass
-
-class Collection
+            import pymongo
+            client = pymongo.MongoClient('vrdata.viarezo.fr',username=self.username,password=self.password,authSource=db_name)
+            return client[db_name]
+        else:
+            print('Wrong Credentials. Aborting.')
+            return None

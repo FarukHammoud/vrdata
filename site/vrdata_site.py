@@ -12,40 +12,6 @@ Bootstrap(app)
 def index():
     return render_template('index.html')
 
-@app.route('/multicast/<string:code>', methods=['GET', 'POST'])
-def multicast(code):
-    if request.method == 'POST':
-        content = request.json
-        if not 'id' in content:
-            #print('[PROBLEM]',content)
-            return jsonify({})
-        else:
-            #print(code,content['id'])
-            with app.app_context():
-                socketio.emit('multicast', {request.get_json()}, broadcast = True,namespace='/'+code)
-            return jsonify({"code":code,"id":content['id']})
-    return '''
-    <!doctype html>
-    <title>Use a HTTP POST Request</title>
-    '''
-
-@app.route('/query/<string:code>', methods=['GET', 'POST'])
-def query(code):
-    if request.method == 'POST':
-        content = request.json
-        if not 'id' in content:
-            #print('[PROBLEM]',content)
-            return jsonify({})
-        else:
-            #print(code,content['id'])
-            with app.app_context():
-                socketio.emit('multicast', {request.get_json()}, broadcast = True,namespace='/'+code)
-            return jsonify({"code":code,"id":content['id']})
-    return '''
-    <!doctype html>
-    <title>Use a HTTP POST Request</title>
-    '''
-
 @app.route('/auth', methods=['GET', 'POST'])
 def auth():
     content = request.json
@@ -54,13 +20,8 @@ def auth():
     auth = Auth()
     if auth.VRify(user,password):
         print('User VRified!',user,password)
-        #token = auth.token(user,password)
-        #return jsonify({'token':token})
-    return jsonify({'message': 'Wrong credentials'})
-
-@socketio.on('code')
-def handle_code(json, methods=['GET', 'POST']):
-    socketio.emit('message', json,namespace='/a1b2c3')
+        return jsonify({'verified': '1','server':'vrdata.viarezo.fr'})
+    return jsonify({'verified': '0'})
 
 if __name__ == '__main__':
     socketio.run(app,debug = True,host = "0.0.0.0",port = 80)
