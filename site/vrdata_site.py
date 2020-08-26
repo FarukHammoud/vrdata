@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from auth import Auth
 
 app = Flask(__name__)
-app.secret_key = 'super secret key'
+app.secret_key = 'viazero'
 socketio = SocketIO(app)
 Bootstrap(app)
 
@@ -17,13 +17,13 @@ def auth():
     content = request.json
     user = content['username']
     password = content['password']
-    auth = Auth()
     if auth.VRify(user,password):
         print('User VRified!',user,password)
         return jsonify({'verified': '1','server':'vrdata.viarezo.fr'})
     return jsonify({'verified': '0'})
 
 if __name__ == '__main__':
+    auth = Auth()
     socketio.run(app,debug = True,host = "0.0.0.0",port = 80)
 
 

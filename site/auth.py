@@ -10,19 +10,45 @@ class User:
 class Auth:
 
     def __init__(self):
-        pass
-        # Check MongoDB Server access
 
-        #import pymongo
-        #client = pymongo.MongoClient("mongodb://localhost:27017/")
+        self.admin_username = None
+        self.admin_password = None
 
-        #if 'vrdata' in client.list_database_names():
-        #    print('VRdata is available.')
-        #    self.vrdata = client["vrdata"]
+        self.import_credentials()
+        self.login()
 
-        #else:
-        #    print('VRdata is not available.')
-        #    self.vrdata = None
+    def import_credentials():
+        import os.path
+        # Check if credentials file exists and upload admin credentials
+        if os.path.isfile('credentials'):
+            with open('credentials', 'r') as reader:
+                self.admin_username = reader[0]
+                self.admin_password = reader[1]
+        # Otherwise ask for credentials and save it in the file
+        else:
+            self.admin_username = input('username: ')
+            self.admin_password = input('password: ')
+            y_n = input('Do you want to save them? (y or n)')
+
+            if y_n == 'y':
+                with open('credentials', 'a') as f: # able to append data to file
+                f.write(self.admin_username) # Were var1 is some variable you have set previously
+                f.write(self.admin_password) 
+                f.close() # You can add this but it is not mandatory 
+    
+    def login(self):
+         # Check MongoDB Server access
+
+        import pymongo
+        self.client = pymongo.MongoClient("mongodb://localhost:27017/",username=self.admin_username,password=self.admin_password,authSource='admin')
+
+        if 'vrdata' in client.list_database_names():
+            print('VRdata is available.')
+            self.vrdata = client["vrdata"]
+
+        else:
+            print('VRdata is not available.')
+            self.vrdata = None
 
     def VRify(self,username,password):
         import requests

@@ -9,7 +9,7 @@ if 'vrdata' in client.list_database_names():
     vrdata = client["vrdata"]
     selected = vrdata['users'].find_one({'user':'2019hammoudf'})
 
-    print(selected['password'])
+print(selected['password'])
 
 else:
     print('VRdata is not available.')
