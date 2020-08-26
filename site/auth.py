@@ -13,16 +13,16 @@ class Auth:
 
         # Check MongoDB Server access
 
-        import pymongo
-        client = pymongo.MongoClient("mongodb://localhost:27017/")
+        #import pymongo
+        #client = pymongo.MongoClient("mongodb://localhost:27017/")
 
-        if 'vrdata' in client.list_database_names():
-            print('VRdata is available.')
-            self.vrdata = client["vrdata"]
+        #if 'vrdata' in client.list_database_names():
+        #    print('VRdata is available.')
+        #    self.vrdata = client["vrdata"]
 
-        else:
-            print('VRdata is not available.')
-            self.vrdata = None
+        #else:
+        #    print('VRdata is not available.')
+        #    self.vrdata = None
 
     def VRify(self,username,password):
         import requests
