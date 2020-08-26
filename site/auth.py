@@ -17,7 +17,7 @@ class Auth:
         self.import_credentials()
         self.login()
 
-    def import_credentials():
+    def import_credentials(self):
         import os.path
         # Check if credentials file exists and upload admin credentials
         if os.path.isfile('credentials'):
@@ -32,9 +32,9 @@ class Auth:
 
             if y_n == 'y':
                 with open('credentials', 'a') as f: # able to append data to file
-                f.write(self.admin_username) # Were var1 is some variable you have set previously
-                f.write(self.admin_password) 
-                f.close() # You can add this but it is not mandatory 
+                    f.write(self.admin_username) # Were var1 is some variable you have set previously
+                    f.write(self.admin_password) 
+                    f.close() # You can add this but it is not mandatory 
     
     def login(self):
          # Check MongoDB Server access
@@ -42,9 +42,9 @@ class Auth:
         import pymongo
         self.client = pymongo.MongoClient("mongodb://localhost:27017/",username=self.admin_username,password=self.admin_password,authSource='admin')
 
-        if 'vrdata' in client.list_database_names():
+        if 'vrdata' in self.client.list_database_names():
             print('VRdata is available.')
-            self.vrdata = client["vrdata"]
+            self.vrdata = self.client["vrdata"]
 
         else:
             print('VRdata is not available.')
@@ -59,8 +59,8 @@ class Auth:
         r = requests.post(url, data = myobj)
 
         if 'access_token' in r.json():
-            self.token = r.json()['access_token']
-            print(self.token)
+            self.vr_token = r.json()['access_token']
+            print(self.vr_token)
             return True
         else:
             self.token = None
