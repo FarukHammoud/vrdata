@@ -23,6 +23,7 @@ class Auth:
         if os.path.isfile('credentials'):
             f = open("credentials", 'r')
             lines = f.readlines()  # array of file lines
+            print(lines)
             self.admin_username = lines[0]
             print('.',self.admin_username,'.')
             self.admin_password = lines[1]
@@ -33,12 +34,12 @@ class Auth:
         else:
             self.admin_username = input('username: ')
             self.admin_password = input('password: ')
-            y_n = input('Do you want to save them? (y or n)')
+            y_n = input('Do you want to save them? (y or n) ')
 
             if y_n == 'y':
-                with open('credentials', 'w') as f: # able to append data to file
-                    f.writelines([self.admin_username, self.admin_password])
-                    f.close() # You can add this but it is not mandatory 
+                f = open('credentials', 'w') 
+                f.writelines([self.admin_username, self.admin_password])
+                f.close() # You can add this but it is not mandatory 
     
     def login(self):
          # Check MongoDB Server access
