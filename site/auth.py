@@ -24,9 +24,9 @@ class Auth:
             f = open("credentials", 'r')
             lines = f.readlines()  # array of file lines
             self.admin_username = lines[0]
-            print(self.admin_username)
+            print('.',self.admin_username,'.')
             self.admin_password = lines[1]
-            print(self.admin_password)
+            print('.',self.admin_password,'.')
             f.close()
 
         # Otherwise ask for credentials and save it in the file
